@@ -5,7 +5,7 @@ networks:
 
 services:
   syncthing4swarm:
-    image: syncthing4swarm/syncthing4swarm
+    image: syncthing4swarm/syncthing4swarm:latest
     volumes:
       - /var/syncthing/data:/var/syncthing/data
     deploy:
