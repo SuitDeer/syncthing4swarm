@@ -16,4 +16,4 @@ services:
       - SYNCTHING_FOLDER_ID=shared
       - SYNCTHING_FOLDER_PATH=/var/syncthing/data
     networks:
-      - syncthing4swarm_prometheus
+      - syncthing4swarm

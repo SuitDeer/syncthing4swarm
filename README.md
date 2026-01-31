@@ -11,6 +11,21 @@ Syncthing4Swarm deploys [Syncthing](https://syncthing.net/) across a Docker Swar
 - **Auto-configuration**: mutual device pairing and folder sharing without manual intervention
 - **Private mode**: disables relays and global discovery (internal traffic only)
 
+## Requirements
+
+- Initialized Docker Swarm (`docker swarm init`)
+- Configured overlay network
+- Same `STGUIAPIKEY` on all nodes
+
+## Prerequisites
+
+Run on **each node**:
+
+```bash
+sudo mkdir -p /var/syncthing/data
+sudo chown 1000:1000 /var/syncthing/data
+```
+
 ## Quick Start
 
 ```bash
@@ -39,21 +54,20 @@ Available environment variables:
 ## Architecture
 
 ```
-+-----------------------------------------------------------+
-|                       Docker Swarm                        |
-|                                                           |
-|  +-------------+   +-------------+   +-------------+      |
-|  |   Node 1    |   |   Node 2    |   |   Node 3    |      |
-|  | +---------+ |   | +---------+ |   | +---------+ |      |
-|  | |Syncthing|<+---+>|Syncthing|<+---+>|Syncthing| |      |
-|  | +---------+ |   | +---------+ |   | +---------+ |      |
-|  |      |      |   |      |      |   |      |      |      |
-|  | /var/sync/  |   | /var/sync/  |   | /var/sync/  |      |
-|  +-------------+   +-------------+   +-------------+      |
-|                                                           |
-|                Overlay network (internal)                 |
-+-----------------------------------------------------------+
-
++-------------------------------------------------------------------------------+
+|                                 Docker Swarm                                  |
+|                                                                               |
+|  +---------------------+   +---------------------+   +---------------------+  |
+|  |       Node 1        |   |       Node 2        |   |       Node 3        |  |
+|  |     +---------+     |   |     +---------+     |   |     +---------+     |  |
+|  |     |Syncthing|<----+---+---->|Syncthing|<----+---+---->|Syncthing|     |  |
+|  |     +---------+     |   |     +---------+     |   |     +---------+     |  |
+|  |          |          |   |          |          |   |          |          |  |
+|  | /var/syncthing/data |   | /var/syncthing/data |   | /var/syncthing/data |  |
+|  +---------------------+   +---------------------+   +---------------------+  |
+|                                                                               |
+|                           Overlay network (internal)                          |
++-------------------------------------------------------------------------------+
 ```
 
 ## How It Works
@@ -66,12 +80,6 @@ On each container startup:
 4. Scans the overlay subnet (`/24`)
 5. Mutually adds all discovered devices with their static IP addresses
 6. Syncs the device list across the shared folder
-
-## Requirements
-
-- Initialized Docker Swarm (`docker swarm init`)
-- Configured overlay network
-- Same `STGUIAPIKEY` on all nodes
 
 ## Exposed Ports
 
