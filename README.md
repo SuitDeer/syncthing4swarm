@@ -4,7 +4,8 @@
   <img src="pictures/syncthing4swarm.svg" alt="combination from syncthing and docker swarm logo syncthing4swarm" width="400">
 </p>
 
-**Replicate Docker volumes across your Swarm cluster — automatically**
+<p align="center"><b>Replicate Docker volumes across your Swarm cluster — automatically
+</b></p>
 
 Syncthing4Swarm deploys [Syncthing](https://syncthing.net/) across a Docker Swarm cluster with automatic peer discovery and zero-touch configuration.
 
