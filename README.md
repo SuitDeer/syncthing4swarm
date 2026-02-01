@@ -1,10 +1,8 @@
 # Syncthing4Swarm
 
-<div style="text-align: center;">
-
-![combination from syncthing and docker swarm logo syncthing4swarm](pictures/syncthing4swarm.svg)
-
-</div>
+<p align="center">
+  <img src="pictures/syncthing4swarm.svg" alt="combination from syncthing and docker swarm logo syncthing4swarm" width="400">
+</p>
 
 **Replicate Docker volumes across your Swarm cluster — automatically**
 
