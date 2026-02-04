@@ -5,7 +5,7 @@ set -eu
 [ -n "${UMASK:-}" ] && umask "$UMASK"
 
 (
-    # Attendre que Syncthing soit prêt
+    # Wait for Syncthing to be ready
     echo "=== Waiting for Syncthing to start for configuration..."
     until curl -s http://localhost:8384/rest/system/status > /dev/null 2>&1; do
         sleep 1
@@ -73,15 +73,19 @@ set -eu
             options=$(syncthing_request "GET" "http://localhost:${PORT}/rest/config/options")
             
             # Check if already disabled
-            if echo "$options" | grep -q '"relaysEnabled"[[:space:]]*:[[:space:]]*false' && \
-               echo "$options" | grep -q '"globalAnnounceEnabled"[[:space:]]*:[[:space:]]*false'; then
+            if echo "$options" | grep -q '"globalAnnounceEnabled".*false' && \
+               echo "$options" | grep -q '"relaysEnabled".*false' && \
+               echo "$options" | grep -q '"natEnabled".*false' && \
+               echo "$options" | grep -q '"localAnnounceEnabled".*true' && \
+               echo "$options" | grep -q '"progressUpdateIntervalS".*-1' && \
+               echo "$options" | grep -q '"setLowPriority".*false'; then
                 echo "=== Global features already disabled"
                 return 0
             fi
             
             # Patch options to disable relays and global discovery but KEEP local discovery
             syncthing_request "PATCH" "http://localhost:${PORT}/rest/config/options" \
-                '{"globalAnnounceEnabled": false, "relaysEnabled": false, "natEnabled": false, "localAnnounceEnabled": true}' > /dev/null
+                '{"globalAnnounceEnabled": false, "relaysEnabled": false, "natEnabled": false, "localAnnounceEnabled": true, "progressUpdateIntervalS": -1, "setLowPriority": false}' > /dev/null
             
             echo "=== Global discovery, relays and NAT disabled (local discovery kept)"
         fi
@@ -115,9 +119,11 @@ set -eu
     "devices": [{"deviceID": "${my_id}"}],
     "rescanIntervalS": 3600,
     "fsWatcherEnabled": true,
-    "fsWatcherDelayS": 10,
+    "fsWatcherDelayS": 1,
     "ignorePerms": false,
-    "autoNormalize": true
+    "autoNormalize": true,
+    "scanProgressIntervalS": -1,
+    "caseSensitiveFS": true
 }
 EOF
 )
