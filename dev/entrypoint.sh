@@ -97,7 +97,8 @@ set -eu
         
         # Check if folder already exists
         if syncthing_request "GET" "http://localhost:${PORT}/rest/config/folders/${FOLDER_ID}" > /dev/null 2>&1; then
-            echo "=== Folder '${FOLDER_ID}' already exists"
+            echo "=== Folder '${FOLDER_ID}' already exists, ensuring fsWatcherDelayS is set..."
+            syncthing_request "PATCH" "http://localhost:${PORT}/rest/config/folders/${FOLDER_ID}" '{"fsWatcherDelayS": 1}' > /dev/null
             return 0
         fi
         
@@ -119,6 +120,7 @@ set -eu
     "devices": [{"deviceID": "${my_id}"}],
     "rescanIntervalS": 3600,
     "fsWatcherEnabled": true,
+    "fsWatcherDelayS": 1,
     "ignorePerms": false,
     "autoNormalize": true,
     "scanProgressIntervalS": -1,
@@ -128,9 +130,6 @@ EOF
 )
         
         syncthing_request "POST" "http://localhost:${PORT}/rest/config/folders" "$folder_config" > /dev/null
-
-        # Patch options to increase sync speed to 1 second
-        syncthing_request "PATCH" "http://localhost:${PORT}/rest/config/folders/${FOLDER_ID}" '{"fsWatcherDelayS": 1}' > /dev/null
         
         echo "=== Folder '${FOLDER_ID}' created successfully"
     }
