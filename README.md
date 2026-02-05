@@ -128,46 +128,6 @@ Run on **each node**:
 sudo docker image rm syncthing4swarm:local
 ```
 
-## Test Volume Replication
-
-An interactive demo is included to verify that files sync across all nodes. It features an editable message box. The content of the message box gets saved into the `/var/syncthing/data/message.json` witch is replicated on each node.
-
-1. Build the demo image:
-
-Run on **each node**:
-
-```bash
-cd demo
-sudo docker build -t demo:local .
-```
-
-2. Deploy the demo:
-
-Run only on **one node**:
-
-```bash
-sudo docker stack deploy -c docker-compose-demo.yml demo
-```
-
-3. Verify replication:
-
-Access `http://<any-node-ip>:8080` on different nodes. Type a message and click "Save & Sync" - it will appear on all other nodes within seconds.
-
-4. Clean up:
-
-Run only on **one node**:
-
-```bash
-sudo docker stack rm demo
-sudo rm /var/syncthing/data/message.json
-```
-
-Run on **each node**:
-
-```bash
-sudo docker image rm demo:local
-```
-
 ## Acknowledgments
 
 This project is built on top of [Syncthing](https://github.com/syncthing/syncthing), an amazing open-source continuous file synchronization program. Huge thanks to the Syncthing contributors for their incredible work.

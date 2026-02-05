@@ -1,9 +1,0 @@
-services:
-  web:
-    image: demo:local
-    ports:
-      - "8080:80"
-    volumes:
-      - /var/syncthing/data:/data
-    deploy:
-      mode: global

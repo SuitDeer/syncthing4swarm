@@ -93,15 +93,6 @@ set -eu
 
     # Create shared folder if it doesn't exist
     create_shared_folder() {
-        echo "=== Checking if folder '${FOLDER_ID}' exists..."
-        
-        # Check if folder already exists
-        if syncthing_request "GET" "http://localhost:${PORT}/rest/config/folders/${FOLDER_ID}" > /dev/null 2>&1; then
-            echo "=== Folder '${FOLDER_ID}' already exists, ensuring fsWatcherDelayS is set..."
-            syncthing_request "PATCH" "http://localhost:${PORT}/rest/config/folders/${FOLDER_ID}" '{"fsWatcherDelayS": 1}' > /dev/null
-            return 0
-        fi
-        
         echo "=== Creating folder '${FOLDER_ID}' at '${FOLDER_PATH}'..."
         
         # Create the directory if it doesn't exist
@@ -120,7 +111,6 @@ set -eu
     "devices": [{"deviceID": "${my_id}"}],
     "rescanIntervalS": 3600,
     "fsWatcherEnabled": true,
-    "fsWatcherDelayS": 1,
     "ignorePerms": false,
     "autoNormalize": true,
     "scanProgressIntervalS": -1,
@@ -355,6 +345,19 @@ EOF
         done
         
         sync_folder_devices "$FOLDER_ID" "$ips_for_folder" "$ids_str"
+
+        # Get current folder config
+        current_delay=$(syncthing_request "GET" "http://localhost:${PORT}/rest/config/folders/${FOLDER_ID}" | grep -o '"fsWatcherDelayS"[[:space:]]*:[[:space:]]*[0-9]*' | grep -o '[0-9]*$')
+        echo "=== Current fsWatcherDelayS: ${current_delay}"
+        
+        if [ "$current_delay" != "1" ]; then
+            echo "=== Updating fsWatcherDelayS to 1..."
+            syncthing_request "PATCH" "http://localhost:${PORT}/rest/config/folders/${FOLDER_ID}" '{"fsWatcherDelayS": 1}'
+            
+            # Verify the change
+            new_delay=$(syncthing_request "GET" "http://localhost:${PORT}/rest/config/folders/${FOLDER_ID}" | grep -o '"fsWatcherDelayS"[[:space:]]*:[[:space:]]*[0-9]*' | grep -o '[0-9]*$')
+            echo "=== New fsWatcherDelayS: ${new_delay}"
+        fi
         
         echo "=== Configuration complete! ==="
     }
