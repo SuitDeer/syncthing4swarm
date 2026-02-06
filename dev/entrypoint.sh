@@ -346,17 +346,17 @@ EOF
         
         sync_folder_devices "$FOLDER_ID" "$ips_for_folder" "$ids_str"
 
-        # Get current folder config
-        current_delay=$(syncthing_request "GET" "http://localhost:${PORT}/rest/config/folders/${FOLDER_ID}" | grep -o '"fsWatcherDelayS"[[:space:]]*:[[:space:]]*[0-9]*' | grep -o '[0-9]*$')
-        echo "=== Current fsWatcherDelayS: ${current_delay}"
+        # Set maxConflicts to -1 and fsWatcherDelayS to 1
+        folder_config=$(syncthing_request "GET" "http://localhost:${PORT}/rest/config/folders/${FOLDER_ID}")
+        current_max_conflicts=$(echo "$folder_config" | grep -oE '"maxConflicts"[[:space:]]*:[[:space:]]*-?[0-9]+' | grep -oE -- '-?[0-9]+$')
+        current_fs_watcher=$(echo "$folder_config" | grep -o '"fsWatcherDelayS"[[:space:]]*:[[:space:]]*[0-9]*' | grep -o '[0-9]*$')
         
-        if [ "$current_delay" != "1" ]; then
-            echo "=== Updating fsWatcherDelayS to 1..."
-            syncthing_request "PATCH" "http://localhost:${PORT}/rest/config/folders/${FOLDER_ID}" '{"fsWatcherDelayS": 1}'
-            
-            # Verify the change
-            new_delay=$(syncthing_request "GET" "http://localhost:${PORT}/rest/config/folders/${FOLDER_ID}" | grep -o '"fsWatcherDelayS"[[:space:]]*:[[:space:]]*[0-9]*' | grep -o '[0-9]*$')
-            echo "=== New fsWatcherDelayS: ${new_delay}"
+        echo "=== Current maxConflicts: ${current_max_conflicts}"
+        echo "=== Current fsWatcherDelayS: ${current_fs_watcher}"
+        
+        if [ "$current_max_conflicts" != "-1" ] || [ "$current_fs_watcher" != "1" ]; then
+            echo "=== Updating maxConflicts to -1 and fsWatcherDelayS to 1..."
+            syncthing_request "PATCH" "http://localhost:${PORT}/rest/config/folders/${FOLDER_ID}" '{"maxConflicts": -1, "fsWatcherDelayS": 1}'
         fi
         
         echo "=== Configuration complete! ==="

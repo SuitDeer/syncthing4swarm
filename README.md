@@ -83,6 +83,7 @@ On each container startup:
 4. Scans the overlay subnet (`/24`)
 5. Mutually adds all discovered devices with their static IP addresses
 6. Syncs the device list across the shared folder
+7. Tunes folder settings (`maxConflicts: -1`, `fsWatcherDelayS: 1`)
 
 ## Exposed Ports
 
