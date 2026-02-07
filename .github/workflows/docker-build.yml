@@ -37,4 +37,4 @@ jobs:
         with:
           context: ./dev
           push: true
-          tags: syncthing4swarm/syncthing4swarm:${{ steps.docker_tag.outputs.tag }}
+          tags: syncthing4swarm:${{ steps.docker_tag.outputs.tag }}
