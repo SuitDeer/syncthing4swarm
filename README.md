@@ -16,44 +16,6 @@ Syncthing4Swarm deploys [Syncthing](https://syncthing.net/) across a Docker Swar
 - **Auto-configuration**: mutual device pairing and folder sharing without manual intervention
 - **Private mode**: disables relays and global discovery (internal traffic only)
 
-## Requirement
-
-- Initialized Docker Swarm (`docker swarm init`)
-
-## Quick Start
-
-Run on **each node**:
-
-```bash
-sudo mkdir -p /var/syncthing/data
-sudo chown 1000:1000 /var/syncthing/data
-```
-
-Run only on **one node**:
-
-```bash
-# Clone the repository
-git clone https://github.com/SuitDeer/syncthing4swarm.git
-cd syncthing4swarm
-
-# Deploy to Swarm
-docker stack deploy -c docker-compose.yml syncthing4swarm
-```
-
-## Configuration
-
-Available environment variables:
-
-| Variable                   | Default               | Description                          |
-| -------------------------- | --------------------- | ------------------------------------ |
-| `STGUIAPIKEY`              | *required*            | API key for Syncthing interface      |
-| `SYNCTHING_PORT`           | `8384`                | REST API port                        |
-| `SYNCTHING_SYNC_PORT`      | `22000`               | Synchronization port                 |
-| `SYNCTHING_FOLDER_ID`      | `shared`              | Shared folder identifier             |
-| `SYNCTHING_FOLDER_PATH`    | `/var/syncthing/data` | Synchronized folder path             |
-| `SYNCTHING_FOLDER_LABEL`   | `Shared`              | Display name for the folder          |
-| `SYNCTHING_DISABLE_GLOBAL` | `true`                | Disables relays and global discovery |
-
 ## Architecture
 
 ```
@@ -72,6 +34,43 @@ Available environment variables:
 ║                           Overlay network (internal)                          ║
 ╚═══════════════════════════════════════════════════════════════════════════════╝
 ```
+
+## Requirement
+
+- Initialized Docker Swarm (`docker swarm init`)
+
+## Quick Start
+
+Run on **each node**:
+
+```bash
+sudo mkdir -p /var/syncthing/data
+```
+
+Run only on **one node**:
+
+```bash
+# Clone the repository
+git clone https://github.com/SuitDeer/syncthing4swarm.git
+cd syncthing4swarm
+
+# Deploy to Swarm
+sudo docker stack deploy -c docker-compose.yml syncthing4swarm
+```
+
+## Configuration
+
+Available environment variables:
+
+| Variable                   | Default               | Description                          |
+| -------------------------- | --------------------- | ------------------------------------ |
+| `STGUIAPIKEY`              | *required*            | API key for Syncthing interface      |
+| `SYNCTHING_PORT`           | `8384`                | REST API port                        |
+| `SYNCTHING_SYNC_PORT`      | `22000`               | Synchronization port                 |
+| `SYNCTHING_FOLDER_ID`      | `shared`              | Shared folder identifier             |
+| `SYNCTHING_FOLDER_PATH`    | `/var/syncthing/data` | Synchronized folder path             |
+| `SYNCTHING_FOLDER_LABEL`   | `Shared`              | Display name for the folder          |
+| `SYNCTHING_DISABLE_GLOBAL` | `true`                | Disables relays and global discovery |
 
 ## How It Works
 

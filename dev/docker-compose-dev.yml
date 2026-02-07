@@ -14,5 +14,7 @@ services:
       - STGUIAPIKEY=A1B2C3 # CHANGE ME
       - SYNCTHING_PORT=8384
       - SYNCTHING_FOLDER_PATH=/var/syncthing/data
+      - PUID=0
+      - PGID=0
     networks:
       - syncthing4swarm

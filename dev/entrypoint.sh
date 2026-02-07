@@ -145,15 +145,15 @@ EOF
         
         echo "=== Scanning ${prefix}.0/24 for Syncthing instances..." >&2
         
-        for i in $(seq 1 254); do
-            ip="${prefix}.${i}"
-            if curl -s -f --max-time 1 -o /dev/null \
-                -H "X-API-Key: ${KEY}" \
-                "http://${ip}:${PORT}/rest/system/status" 2>/dev/null; then
+        seq 1 254 | xargs -P 50 -I {} sh -c '
+            ip="'"$prefix"'.{}"
+            if curl -s -f --max-time 3 -o /dev/null \
+                -H "X-API-Key: '"$KEY"'" \
+                "http://${ip}:'"$PORT"'/rest/system/status" 2>/dev/null; then
                 echo "=== Found Syncthing at ${ip}" >&2
                 echo "$ip"
             fi
-        done
+        '
     }
 
     # Check if a string contains a substring
