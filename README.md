@@ -44,33 +44,33 @@ docker stack deploy -c docker-compose.yml syncthing4swarm
 
 Available environment variables:
 
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `STGUIAPIKEY` | *required* | API key for Syncthing interface |
-| `SYNCTHING_PORT` | `8384` | REST API port |
-| `SYNCTHING_SYNC_PORT` | `22000` | Synchronization port |
-| `SYNCTHING_FOLDER_ID` | `shared` | Shared folder identifier |
-| `SYNCTHING_FOLDER_PATH` | `/var/syncthing/data` | Synchronized folder path |
-| `SYNCTHING_FOLDER_LABEL` | `Shared` | Display name for the folder |
-| `SYNCTHING_DISABLE_GLOBAL` | `true` | Disables relays and global discovery |
+| Variable                   | Default               | Description                          |
+| -------------------------- | --------------------- | ------------------------------------ |
+| `STGUIAPIKEY`              | *required*            | API key for Syncthing interface      |
+| `SYNCTHING_PORT`           | `8384`                | REST API port                        |
+| `SYNCTHING_SYNC_PORT`      | `22000`               | Synchronization port                 |
+| `SYNCTHING_FOLDER_ID`      | `shared`              | Shared folder identifier             |
+| `SYNCTHING_FOLDER_PATH`    | `/var/syncthing/data` | Synchronized folder path             |
+| `SYNCTHING_FOLDER_LABEL`   | `Shared`              | Display name for the folder          |
+| `SYNCTHING_DISABLE_GLOBAL` | `true`                | Disables relays and global discovery |
 
 ## Architecture
 
 ```
-+-------------------------------------------------------------------------------+
-|                                 Docker Swarm                                  |
-|                                                                               |
-|  +---------------------+   +---------------------+   +---------------------+  |
-|  |       Node 1        |   |       Node 2        |   |       Node 3        |  |
-|  |     +---------+     |   |     +---------+     |   |     +---------+     |  |
-|  |     |Syncthing|<----+---+---->|Syncthing|<----+---+---->|Syncthing|     |  |
-|  |     +---------+     |   |     +---------+     |   |     +---------+     |  |
-|  |          |          |   |          |          |   |          |          |  |
-|  | /var/syncthing/data |   | /var/syncthing/data |   | /var/syncthing/data |  |
-|  +---------------------+   +---------------------+   +---------------------+  |
-|                                                                               |
-|                           Overlay network (internal)                          |
-+-------------------------------------------------------------------------------+
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║                                 Docker Swarm                                  ║
+║                                                                               ║
+║  ┌─────────────────────┐   ┌─────────────────────┐   ┌─────────────────────┐  ║
+║  │       Node 1        │   │       Node 2        │   │       Node 3        │  ║
+║  │     ┌─────────┐     │   │     ┌─────────┐     │   │     ┌─────────┐     │  ║
+║  │     │Syncthing│◄────┼───┼────►│Syncthing│◄────┼───┼────►│Syncthing│     │  ║
+║  │     └────┬────┘     │   │     └────┬────┘     │   │     └────┬────┘     │  ║
+║  │          │          │   │          │          │   │          │          │  ║
+║  │ /var/syncthing/data │   │ /var/syncthing/data │   │ /var/syncthing/data │  ║
+║  └─────────────────────┘   └─────────────────────┘   └─────────────────────┘  ║
+║                                                                               ║
+║                           Overlay network (internal)                          ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
 ```
 
 ## How It Works
@@ -87,11 +87,11 @@ On each container startup:
 
 ## Exposed Ports
 
-| Port | Protocol | Usage |
-|------|----------|-------|
-| 8384 | TCP | Web interface and REST API |
-| 22000 | TCP/UDP | File synchronization |
-| 21027 | UDP | Local discovery |
+| Port  | Protocol | Usage                      |
+| ----- | -------- | -------------------------- |
+| 8384  | TCP      | Web interface and REST API |
+| 22000 | TCP/UDP  | File synchronization       |
+| 21027 | UDP      | Local discovery            |
 
 ## Development
 
