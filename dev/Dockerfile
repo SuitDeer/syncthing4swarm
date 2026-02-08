@@ -1,4 +1,5 @@
-FROM syncthing/syncthing:2.0.14
+ARG SYNCTHING_VERSION=latest
+FROM syncthing/syncthing:${SYNCTHING_VERSION}
 
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod 0555 /entrypoint.sh

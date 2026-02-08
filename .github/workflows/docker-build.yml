@@ -37,4 +37,6 @@ jobs:
         with:
           context: ./dev
           push: true
+          build-args: |
+            SYNCTHING_VERSION=latest
           tags: suitdeer/syncthing4swarm:${{ steps.docker_tag.outputs.tag }}
