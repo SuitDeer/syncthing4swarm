@@ -1,8 +1,12 @@
 name: Build on Upstream Syncthing Release
 
 on:
-  schedule:
-    - cron: '0 * * * *'
+  workflow_dispatch:
+    inputs:
+      force_version:
+        description: 'Force build for a specific Syncthing version (e.g. v1.29.0). Leave empty to auto-detect latest.'
+        required: false
+        default: ''
 
 jobs:
   check-and-build:
