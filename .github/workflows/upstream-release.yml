@@ -2,8 +2,8 @@ name: Build on Upstream Syncthing Release
 
 on:
   schedule:
-    # Check for new Syncthing releases daily at 06:00 UTC
-    - cron: '*/5 * * * *'
+    # Check for new Syncthing releases every hour
+    - cron: '0 * * * *'
   workflow_dispatch:
     inputs:
       force_version:
