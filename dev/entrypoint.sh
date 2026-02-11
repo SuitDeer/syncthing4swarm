@@ -114,7 +114,9 @@ set -eu
     "ignorePerms": false,
     "autoNormalize": true,
     "scanProgressIntervalS": -1,
-    "caseSensitiveFS": true
+    "caseSensitiveFS": true,
+    "sendOwnership": true,
+    "syncOwnership": true
 }
 EOF
 )
