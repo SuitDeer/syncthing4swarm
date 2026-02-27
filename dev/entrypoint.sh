@@ -113,7 +113,9 @@ set -eu
     "scanProgressIntervalS": -1,
     "caseSensitiveFS": true,
     "sendOwnership": true,
-    "syncOwnership": true
+    "syncOwnership": true,
+    "maxConflicts": 0,
+    "fsWatcherDelayS": 1
 }
 EOF
 )
@@ -348,15 +350,15 @@ EOF
         # Set maxConflicts to -1 and fsWatcherDelayS to 1
         folder_config=$(syncthing_request "GET" "http://localhost:${PORT}/rest/config/folders/${FOLDER_ID}")
         sleep 20
-        current_max_conflicts=$(echo "$folder_config" | grep -oE '"maxConflicts"[[:space:]]*:[[:space:]]*-?[0-9]+' | grep -oE -- '-?[0-9]+$')
+        current_max_conflicts=$(echo "$folder_config" | grep -o '"maxConflicts"[[:space:]]*:[[:space:]]*[0-9]*' | grep -o '[0-9]*$')
         current_fs_watcher=$(echo "$folder_config" | grep -o '"fsWatcherDelayS"[[:space:]]*:[[:space:]]*[0-9]*' | grep -o '[0-9]*$')
         
         echo "=== Current maxConflicts: ${current_max_conflicts}"
         echo "=== Current fsWatcherDelayS: ${current_fs_watcher}"
         
-        if [ "$current_max_conflicts" != "-1" ] || [ "$current_fs_watcher" != "1" ]; then
-            echo "=== Updating maxConflicts to -1 and fsWatcherDelayS to 1..."
-            syncthing_request "PATCH" "http://localhost:${PORT}/rest/config/folders/${FOLDER_ID}" '{"maxConflicts": -1, "fsWatcherDelayS": 1}'
+        if [ "$current_max_conflicts" != "0" ] || [ "$current_fs_watcher" != "1" ]; then
+            echo "=== Updating maxConflicts to 0 and fsWatcherDelayS to 1..."
+            syncthing_request "PATCH" "http://localhost:${PORT}/rest/config/folders/${FOLDER_ID}" '{"maxConflicts": 0, "fsWatcherDelayS": 1}'
         fi
         
         echo "=== Configuration complete! ==="

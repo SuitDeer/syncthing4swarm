@@ -97,7 +97,7 @@ On each container startup:
    - [`"caseSensitiveFS": true`](https://docs.syncthing.net/users/config.html#config-option-folder.casesensitivefs) Affects performance by disabling the extra safety checks for case insensitive filesystems. The mechanism and how to set it up is described in a [separate chapter](https://docs.syncthing.net/advanced/folder-caseSensitiveFS.html).
    - [`"sendOwnership": true`](https://docs.syncthing.net/users/config.html#config-option-folder.sendownership) File and directory ownership information is scanned when this is set to `true`. See [sendOwnership](https://docs.syncthing.net/advanced/folder-send-ownership.html) for more information.
    - [`"syncOwnership": true`](https://docs.syncthing.net/users/config.html#config-option-folder.syncownership) File and directory ownership is synced when this is set to `true`. See [syncOwnership](https://docs.syncthing.net/advanced/folder-sync-ownership.html) for more information.
-   - [`"maxConflicts": -1`](https://docs.syncthing.net/users/config.html#config-option-folder.maxconflicts) The maximum number of conflict copies to keep around for any given file. The default is `10`. `-1`, means an unlimited number. Setting this to `0` disables conflict copies altogether.
+   - [`"maxConflicts": 0`](https://docs.syncthing.net/users/config.html#config-option-folder.maxconflicts) The maximum number of conflict copies to keep around for any given file. The default is `10`. `-1`, means an unlimited number. Setting this to `0` disables conflict copies altogether.
    - [`"fsWatcherDelayS": 1`](https://docs.syncthing.net/users/config.html#config-option-folder.fswatcherdelays) The duration during which changes detected are accumulated, before a scan is scheduled (only takes effect if fsWatcherEnabled is set to `true`).
 
 ## Exposed Ports
@@ -113,6 +113,8 @@ On each container startup:
 Run on **each node**:
 
 ```bash
+sudo mkdir -p /var/syncthing/data
+
 # Clone the repository
 git clone https://github.com/SuitDeer/syncthing4swarm.git
 cd syncthing4swarm/dev
