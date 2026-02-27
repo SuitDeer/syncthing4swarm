@@ -19,7 +19,6 @@ set -eu
     KEY="${STGUIAPIKEY:-}"
     PORT="${SYNCTHING_PORT:-8384}"
     SYNC_PORT="${SYNCTHING_SYNC_PORT:-22000}"
-    DISABLE_GLOBAL="${SYNCTHING_DISABLE_GLOBAL:-true}"
     FOLDER_ID="${SYNCTHING_FOLDER_ID:-shared}"
     FOLDER_PATH="${SYNCTHING_FOLDER_PATH:-/var/syncthing/data}"
     FOLDER_LABEL="${SYNCTHING_FOLDER_LABEL:-Shared}"
@@ -66,29 +65,27 @@ set -eu
 
     # Disable global discovery and relays via API
     disable_global_features() {
-        if [ "$DISABLE_GLOBAL" = "true" ]; then
-            echo "=== Disabling global discovery and relays..."
-            
-            # Get current options
-            options=$(syncthing_request "GET" "http://localhost:${PORT}/rest/config/options")
-            
-            # Check if already disabled
-            if echo "$options" | grep -q '"globalAnnounceEnabled".*false' && \
-               echo "$options" | grep -q '"relaysEnabled".*false' && \
-               echo "$options" | grep -q '"natEnabled".*false' && \
-               echo "$options" | grep -q '"localAnnounceEnabled".*true' && \
-               echo "$options" | grep -q '"progressUpdateIntervalS".*-1' && \
-               echo "$options" | grep -q '"setLowPriority".*false'; then
-                echo "=== Global features already disabled"
-                return 0
-            fi
-            
-            # Patch options to disable relays and global discovery but KEEP local discovery
-            syncthing_request "PATCH" "http://localhost:${PORT}/rest/config/options" \
-                '{"globalAnnounceEnabled": false, "relaysEnabled": false, "natEnabled": false, "localAnnounceEnabled": true, "progressUpdateIntervalS": -1, "setLowPriority": false}' > /dev/null
-            
-            echo "=== Global discovery, relays and NAT disabled (local discovery kept)"
+        echo "=== Disabling global discovery and relays..."
+        
+        # Get current options
+        options=$(syncthing_request "GET" "http://localhost:${PORT}/rest/config/options")
+        
+        # Check if already disabled
+        if echo "$options" | grep -q '"globalAnnounceEnabled".*false' && \
+            echo "$options" | grep -q '"relaysEnabled".*false' && \
+            echo "$options" | grep -q '"natEnabled".*false' && \
+            echo "$options" | grep -q '"localAnnounceEnabled".*true' && \
+            echo "$options" | grep -q '"progressUpdateIntervalS".*-1' && \
+            echo "$options" | grep -q '"setLowPriority".*false'; then
+            echo "=== Global features already disabled"
+            return 0
         fi
+        
+        # Patch options to disable relays and global discovery but KEEP local discovery
+        syncthing_request "PATCH" "http://localhost:${PORT}/rest/config/options" \
+            '{"globalAnnounceEnabled": false, "relaysEnabled": false, "natEnabled": false, "localAnnounceEnabled": true, "progressUpdateIntervalS": -1, "setLowPriority": false}' > /dev/null
+        
+        echo "=== Global discovery, relays and NAT disabled (local discovery kept)"
     }
 
     # Create shared folder if it doesn't exist
