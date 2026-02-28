@@ -39,4 +39,4 @@ jobs:
           push: true
           build-args: |
             SYNCTHING_VERSION=latest
-          tags: suitdeer/syncthing4swarm:${{ steps.docker_tag.outputs.tag }}
+          tags: syncthing4swarm/syncthing4swarm:${{ steps.docker_tag.outputs.tag }}
