@@ -347,7 +347,7 @@ EOF
         
         sync_folder_devices "$FOLDER_ID" "$ips_for_folder" "$ids_str"
 
-        # Set maxConflicts to -1 and fsWatcherDelayS to 1
+        # Set maxConflicts to 0 and fsWatcherDelayS to 1
         folder_config=$(syncthing_request "GET" "http://localhost:${PORT}/rest/config/folders/${FOLDER_ID}")
         sleep 20
         current_max_conflicts=$(echo "$folder_config" | grep -o '"maxConflicts"[[:space:]]*:[[:space:]]*[0-9]*' | grep -o '[0-9]*$')
