@@ -51,7 +51,7 @@ Run only on **one node**:
 
 ```bash
 # Clone the repository
-git clone https://github.com/SuitDeer/syncthing4swarm.git
+git clone https://github.com/sammonsempes/syncthing4swarm.git
 cd syncthing4swarm
 
 # Deploy to Swarm
@@ -116,7 +116,7 @@ Run on **each node**:
 sudo mkdir -p /var/syncthing/data
 
 # Clone the repository
-git clone https://github.com/SuitDeer/syncthing4swarm.git
+git clone https://github.com/sammonsempes/syncthing4swarm.git
 cd syncthing4swarm/dev
 
 # Build image
