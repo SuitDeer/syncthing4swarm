@@ -18,9 +18,11 @@ jobs:
     steps:
       - name: Get latest Syncthing release tag
         id: upstream
+        env:
+          FORCE_VERSION: ${{ github.event.inputs.force_version }}
         run: |
-          if [ -n "${{ github.event.inputs.force_version }}" ]; then
-            TAG="${{ github.event.inputs.force_version }}"
+          if [ -n "$FORCE_VERSION" ]; then
+            TAG="$FORCE_VERSION"
           else
             TAG=$(curl -sf https://api.github.com/repos/syncthing/syncthing/releases | jq -r '[.[] | select(.prerelease == false and .draft == false)][0].tag_name')
           fi
