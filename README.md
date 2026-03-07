@@ -1,5 +1,7 @@
 # Syncthing4Swarm
-
+> ⚠️ Archived: Please use the offical branch of syncthing4swarm https://github.com/sammonsempes/syncthing4swarm
+> This was only a pull request Repo.
+> Now it is merged into the offical branch
 <p align="center">
   <img src="pictures/syncthing4swarm.svg" alt="combination from syncthing and docker swarm logo syncthing4swarm" width="400">
 </p>
